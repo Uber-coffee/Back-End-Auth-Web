@@ -23,6 +23,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -38,7 +39,7 @@ class RefreshTokenProviderTest {
     private InvalidTokenRepository invalidTokenRepository;
 
     @BeforeEach
-    public void init() {
+    public void init() throws UserNotFoundException {
         initAppProperties();
         initUserDetailsService();
         invalidTokenRepository = mock(InvalidTokenRepository.class);
@@ -60,11 +61,11 @@ class RefreshTokenProviderTest {
         });
     }
 
-    public void initUserDetailsService() {
+    public void initUserDetailsService() throws UserNotFoundException{
         userDetailsService = mock(UserDetailsService.class);
-        when(userDetailsService.loadUserByUsername(anyString())).then(
+        when(userDetailsService.loadById(anyLong())).then(
                 i -> org.springframework.security.core.userdetails.User.builder()
-                        .username(i.getArgument(0))
+                        .username(i.getArgument(0).toString())
                         .password("password")
                         .authorities(List.of(Role.ROLE_MANAGER))
                         .disabled(false)
