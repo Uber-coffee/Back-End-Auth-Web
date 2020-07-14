@@ -18,14 +18,12 @@ node {
 
         dir('auth-web') {
             docker.image('maven:3.6.3-openjdk-11').inside() {
-                docker.image('maven:3.6.3-openjdk-11').inside() {
-                    stage('Run tests') {
-                        sh 'mvn test'
-                    }
+                stage('Run tests') {
+                    sh 'mvn test'
+                }
 
-                    stage('Build project') {
-                        sh 'mvn -DskipTests package spring-boot:repackage'
-                    }
+                stage('Build project') {
+                    sh 'mvn -DskipTests package spring-boot:repackage'
                 }
             }
         }
