@@ -1,6 +1,7 @@
 package authweb.service.user_details;
 
 import authweb.entity.User;
+import authweb.exception.UserNotFoundException;
 import authweb.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,7 +18,15 @@ public class UserDetailsService implements org.springframework.security.core.use
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        final User user = userRepository.findByEmail(email);
+        Long id;
+
+        try {
+            id = Long.parseLong(email);
+        }catch (NumberFormatException e){
+            throw new UsernameNotFoundException("Nice ID, Bro");
+        }
+
+        final User user = userRepository.findById(id).orElseThrow(()->new UsernameNotFoundException("Bad ID, Bro"));
         if(user == null) throw new UsernameNotFoundException("");
         return org.springframework.security.core.userdetails.User.builder()
                 .username(Long.toString(user.getId()))

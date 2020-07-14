@@ -1,6 +1,5 @@
 package authweb.config.security;
 
-
 import authweb.security.filter.WebTokenAuthFilter;
 import authweb.security.token.AccessTokenProvider;
 import authweb.service.user_details.UserDetailsService;

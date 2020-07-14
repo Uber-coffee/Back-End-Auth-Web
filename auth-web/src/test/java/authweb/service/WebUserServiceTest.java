@@ -46,7 +46,7 @@ class WebUserServiceTest {
     }
 
     @Test
-    public void createUser() throws UserAlreadyExistException {
+    public void createUser(){
         WebUserService webUserService = new WebUserService(userRepository, passwordEncoder);
         CreateUserRequest request = new CreateUserRequest();
         request.setEmail("test@test.ru");
@@ -63,7 +63,7 @@ class WebUserServiceTest {
     }
 
     @Test
-    public void createUserException() throws UserAlreadyExistException {
+    public void createUserException(){
         WebUserService webUserService = new WebUserService(userRepository, passwordEncoder);
         CreateUserRequest request = new CreateUserRequest();
         request.setEmail("test@test.ru");

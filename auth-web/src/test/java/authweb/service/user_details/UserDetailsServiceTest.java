@@ -10,10 +10,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -22,13 +24,13 @@ class UserDetailsServiceTest {
 
     private UserRepository userRepository;
 
-    private final Map<String, User> users = new HashMap<>();
+    private final Map<Long, User> users = new HashMap<>();
 
     @BeforeEach
     public void init() {
         userRepository = mock(UserRepository.class);
-        when(userRepository.findByEmail(anyString())).thenAnswer(
-                i -> users.get(i.getArgument(0))
+        when(userRepository.findById(anyLong())).thenAnswer(
+                i -> Optional.ofNullable(users.get(i.getArgument(0)))
         );
         User user = new User(
                 (long) 1,
@@ -39,13 +41,13 @@ class UserDetailsServiceTest {
                 "password",
                 List.of(Role.ROLE_MANAGER)
         );
-        users.put(user.getEmail(), user);
+        users.put(user.getId(), user);
     }
 
     @Test
     void loadUserByUsername() {
         UserDetailsService userDetailsService = new UserDetailsService(userRepository);
-        UserDetails userDetails = userDetailsService.loadUserByUsername("test@test.ru");
+        UserDetails userDetails = userDetailsService.loadUserByUsername("1");
         assertNotNull(userDetails);
         assertEquals(userDetails.getUsername(), "1");
         assertEquals(userDetails.getPassword(), "password");
