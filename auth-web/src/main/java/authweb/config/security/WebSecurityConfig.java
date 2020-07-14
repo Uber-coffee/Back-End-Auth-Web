@@ -22,7 +22,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final String[] WHITE_LIST = {
             "/w/auth/login",
-            "/auth/refresh",
+            "/w/auth/refresh",
             "/configuration/**",
             "/swagger-resources/**",
             "/swagger-ui.html",
