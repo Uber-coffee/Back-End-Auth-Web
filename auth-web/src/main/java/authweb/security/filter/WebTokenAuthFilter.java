@@ -29,17 +29,17 @@ public class WebTokenAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         try {
             accessTokenProvider.validateToken(httpServletRequest);
-            final List<String> roles = accessTokenProvider.getRoles(httpServletRequest);
-            if (roles.contains(Role.ROLE_CUSTOMER.name())) throw new AccessDeniedException("");
+            //final List<String> roles = accessTokenProvider.getRoles(httpServletRequest);
+            //if (roles.contains(Role.ROLE_CUSTOMER.name())) throw new AccessDeniedException("");
             SecurityContextHolder.getContext().setAuthentication(accessTokenProvider.getAuthentication(httpServletRequest));
         } catch (TokenException e) {
             SecurityContextHolder.clearContext();
             httpServletResponse.sendError(HttpStatus.UNAUTHORIZED.value(), "Invalid or expired JWT.");
             return;
-        } catch (AccessDeniedException e) {
+        /*} catch (AccessDeniedException e) {
             SecurityContextHolder.clearContext();
             httpServletResponse.sendError(HttpStatus.FORBIDDEN.value(), "You don't have permission.");
-            return;
+            return;*/
         } catch (UserNotFoundException e) {
             SecurityContextHolder.clearContext();
             httpServletResponse.sendError(HttpStatus.I_AM_A_TEAPOT.value(), "Everything is ok, but user doesn't exists.");
