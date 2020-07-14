@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping(value = "/auth")
+@RequestMapping(value = "/w/auth")
 public class CommonAuthController {
 
     private final CommonAuthService commonAuthService;

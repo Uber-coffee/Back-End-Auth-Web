@@ -1,6 +1,6 @@
 package authweb.config.security;
 
-import authweb.security.filter.WebTokenAuthFilter;
+import authweb.security.filter.DefaultTokenAuthFilter;
 import authweb.security.token.AccessTokenProvider;
 import authweb.service.user_details.UserDetailsService;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +21,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final String[] WHITE_LIST = {
             "/w/auth/login",
-            "/auth/refresh",
+            "/w/auth/refresh",
             "/configuration/**",
             "/swagger-resources/**",
             "/swagger-ui.html",
@@ -59,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .antMatcher("/w/**")
                 .userDetailsService(userDetailsService)
-                .addFilterBefore(new WebTokenAuthFilter(accessTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new DefaultTokenAuthFilter(accessTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .anyRequest()
                 .authenticated();
