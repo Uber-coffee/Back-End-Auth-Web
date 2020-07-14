@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-// Jenkins file for auth_web service
+// Jenkins file for auth-web service
 
 node {
     try {
@@ -31,12 +31,12 @@ node {
         if (env.BRANCH_NAME == 'develop' || env.BRANCH_NAME == 'master') {
             dir('auth-web') {
                 stage('Build docker image') {
-                    docker.build("auth_web:${env.BUILD_ID}")
+                    docker.build("auth-web:${env.BUILD_ID}")
                 }
             }
 
             stage('Build success notification') {
-                telegram_msg("Build ${env.BRANCH_NAME} finished, image: auth_web:${env.BUILD_ID}")
+                telegram_msg("Build ${env.BRANCH_NAME} finished, image: auth-web:${env.BUILD_ID}")
             }
 
             stage('Push to registry and deploy (dev)') {
@@ -63,7 +63,7 @@ node {
 
 def telegram_msg(String msg) {
     telegramSend(
-            message: "Auth_web service: " + msg,
+            message: "Auth-web service: " + msg,
             chatId: -1001336690990
     )
 }
