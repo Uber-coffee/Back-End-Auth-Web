@@ -7,6 +7,8 @@ import authweb.payload.CreateUserRequest;
 import authweb.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -70,6 +72,6 @@ class WebUserServiceTest {
         request.setFirstName("test");
         request.setLastName("testovich");
         webUserService.createUser(request, Role.ROLE_MANAGER);
-        assertThrows(UserAlreadyExistException.class, () -> webUserService.createUser(request, Role.ROLE_MANAGER));
+        assertEquals(new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE), webUserService.createUser(request, Role.ROLE_MANAGER));
     }
 }
