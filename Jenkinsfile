@@ -6,7 +6,7 @@ node {
     try {
         stage('git') {
             git([
-                    url: 'git@github.com:Uber-coffee/Back-end.git',
+                    url: 'git@github.com:Uber-coffee/Back-End-Auth-Web.git',
                     branch: "${env.BRANCH_NAME}",
                     credentialsId: "meshcheryakov_backend"
             ])
