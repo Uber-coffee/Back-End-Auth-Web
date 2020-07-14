@@ -3,6 +3,9 @@ server:
 logging:
   level:
     auth.service: DEBUG
+    org:
+      springframework:
+        security: DEBUG
 spring:
   application:
     name: auth-service
