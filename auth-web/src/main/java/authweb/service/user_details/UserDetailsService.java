@@ -18,16 +18,22 @@ public class UserDetailsService implements org.springframework.security.core.use
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Long id;
-
-        try {
-            id = Long.parseLong(email);
-        }catch (NumberFormatException e){
-            throw new UsernameNotFoundException("Nice ID, Bro");
-        }
-
-        final User user = userRepository.findById(id).orElseThrow(()->new UsernameNotFoundException("Bad ID, Bro"));
+        final User user = userRepository.findByEmail(email);
         if(user == null) throw new UsernameNotFoundException("");
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(Long.toString(user.getId()))
+                .password(user.getPassword())
+                .authorities(user.getRoles())
+                .disabled(false)
+                .accountLocked(false)
+                .credentialsExpired(false)
+                .accountExpired(false)
+                .build();
+    }
+
+    public UserDetails loadById(Long id) throws UserNotFoundException{
+
+        final User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         return org.springframework.security.core.userdetails.User.builder()
                 .username(Long.toString(user.getId()))
                 .password(user.getPassword())

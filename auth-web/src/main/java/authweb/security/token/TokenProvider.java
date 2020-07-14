@@ -146,7 +146,7 @@ public abstract class TokenProvider {
         try {
             UserDetails userDetails;
             if(!roles.contains(Role.ROLE_CUSTOMER.name())) {
-                userDetails = userDetailsService.loadUserByUsername(subject);
+                userDetails = userDetailsService.loadById(Long.parseLong(subject));
                 return new UsernamePasswordAuthenticationToken(
                     userDetails.getUsername(),
                     userDetails.getPassword(),
@@ -154,7 +154,7 @@ public abstract class TokenProvider {
             } else {
                 throw new WrongAuthServiceException();
             }
-        } catch (UsernameNotFoundException e) {
+        } catch (UsernameNotFoundException | NumberFormatException e) {
             throw new UserNotFoundException();
         }
     }
