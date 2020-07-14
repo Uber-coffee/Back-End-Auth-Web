@@ -16,9 +16,8 @@ node {
             telegram_msg("Build ${env.BRANCH_NAME} started. Build id: ${env.BUILD_ID}")
         }
 
-
-        docker.image('maven:3.6.3-openjdk-11').inside() {
-            dir('auth-web') {
+        dir('auth-web') {
+            docker.image('maven:3.6.3-openjdk-11').inside() {
                 docker.image('maven:3.6.3-openjdk-11').inside() {
                     stage('Run tests') {
                         sh 'mvn test'
@@ -32,8 +31,10 @@ node {
         }
 
         if (env.BRANCH_NAME == 'develop' || env.BRANCH_NAME == 'master') {
-            stage('Build docker image') {
-                docker.build("auth_web:${env.BUILD_ID}")
+            dir('auth-web') {
+                stage('Build docker image') {
+                    docker.build("auth_web:${env.BUILD_ID}")
+                }
             }
 
             stage('Build success notification') {
