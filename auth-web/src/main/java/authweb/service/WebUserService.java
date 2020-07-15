@@ -43,11 +43,12 @@ public class WebUserService {
         User user = mapper.map(createUserRequest, User.class);
         user.setRoles(List.of(role));
         final String password = PasswordUtil.generatePassword();
+
         user.setPassword(passwordEncoder.encode(password));
         // TODO send credentials to email address
         userRepository.save(user);
         log.debug("Create user with credentials: email({}), password({})", user.getEmail(), password);
-        return new ResponseEntity<>(new WebLoginRequest(createUserRequest.getEmail(), user.getPassword()), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(new WebLoginRequest(createUserRequest.getEmail(), password), HttpStatus.ACCEPTED);
     }
 
     public ResponseEntity<List<UserDTO>> getUsers(WebUsersListRequest webUsersListRequest){
