@@ -4,7 +4,6 @@ import authweb.entity.Role;
 import authweb.entity.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.joda.time.DateTime;
 
 import java.util.List;
 
@@ -18,7 +17,9 @@ public class UserDTO {
 
     private String email;
 
-    private DateTime registrationDate;
+    private String phoneNumber;
+
+    private String registrationDate;
 
     private List<Role> roles;
 
@@ -27,7 +28,8 @@ public class UserDTO {
         userDTO.setEmail(user.getEmail());
         userDTO.setFirstName(user.getFirstName());
         userDTO.setLastName(user.getLastName());
-        userDTO.setRegistrationDate(getRegistrationDate());
+        userDTO.setPhoneNumber(user.getPhoneNumber());
+        userDTO.setRegistrationDate(user.getRegistrationDate().toString());
         userDTO.setRoles(user.getRoles());
         return userDTO;
     }

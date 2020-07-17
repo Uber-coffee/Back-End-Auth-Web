@@ -65,12 +65,16 @@ public class WebUserService {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        for (User user: users) {
+            user.setRegistrationDate(userRepository.getOne(user.getId()).getRegistrationDate());
+        }
+
         List<UserDTO> userDTOs = new ArrayList<>();
 
         for (User user:users) {
             userDTOs.add(new UserDTO().getDTOFromUser(user));
         }
 
-        return new ResponseEntity<>(userDTOs, HttpStatus.CREATED);
+        return new ResponseEntity<>(userDTOs, HttpStatus.ACCEPTED);
     }
 }
