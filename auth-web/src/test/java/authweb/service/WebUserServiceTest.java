@@ -2,7 +2,6 @@ package authweb.service;
 
 import authweb.entity.Role;
 import authweb.entity.User;
-import authweb.exception.UserAlreadyExistException;
 import authweb.payload.CreateUserRequest;
 import authweb.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +18,6 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;

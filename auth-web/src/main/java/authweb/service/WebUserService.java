@@ -5,6 +5,7 @@ import authweb.entity.User;
 import authweb.payload.*;
 import authweb.repository.UserRepository;
 import authweb.util.PasswordUtil;
+import org.joda.time.DateTime;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ public class WebUserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public ResponseEntity<WebUserCreationResponse> createUser(CreateUserRequest createUserRequest, Role role){
+    public ResponseEntity<UserDTO> createUser(CreateUserRequest createUserRequest, Role role){
         if(userRepository.existsByEmail(createUserRequest.getEmail())){
            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
@@ -45,7 +46,16 @@ public class WebUserService {
         // TODO send credentials to email address
         userRepository.save(user);
         log.debug("Create user with credentials: email({}), password({})", user.getEmail(), password);
-        return new ResponseEntity<>(new WebUserCreationResponse(createUserRequest.getEmail(), password, user.getRegistrationDate().toString()), HttpStatus.ACCEPTED);
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setRoles(user.getRoles());
+        userDTO.setRegistrationDate(DateTime.now().toString());
+        userDTO.setPhoneNumber(user.getPhoneNumber());
+        userDTO.setFirstName(user.getFirstName());
+        userDTO.setLastName(user.getLastName());
+        userDTO.setEmail(user.getEmail());
+
+        return new ResponseEntity<>(userDTO, HttpStatus.ACCEPTED);
     }
 
     public ResponseEntity<HttpStatus> updateUser(UpdateUserRequest updateUserRequest){

@@ -34,7 +34,7 @@ public class WebUserController {
             @ApiResponse(code = 201, message = "User created successfully"),
             @ApiResponse(code = 403, message = "Such User already exists"),
     })
-    public ResponseEntity<WebUserCreationResponse> createManager(@Valid @RequestBody CreateUserRequest createUserRequest){
+    public ResponseEntity<UserDTO> createManager(@Valid @RequestBody CreateUserRequest createUserRequest){
         return webUserService.createUser(createUserRequest, Role.ROLE_MANAGER);
     }
 
@@ -46,7 +46,7 @@ public class WebUserController {
             @ApiResponse(code = 201, message = "User created successfully"),
             @ApiResponse(code = 406, message = "Such User already exists"),
     })
-    public ResponseEntity<WebUserCreationResponse> createSeller(@Valid @RequestBody CreateUserRequest createUserRequest){
+    public ResponseEntity<UserDTO> createSeller(@Valid @RequestBody CreateUserRequest createUserRequest){
         return webUserService.createUser(createUserRequest, Role.ROLE_SELLER);
     }
 
@@ -71,7 +71,6 @@ public class WebUserController {
             @ApiResponse(code = 406, message = "Such User already exists"),
     })
     public ResponseEntity<HttpStatus> deleteUser(@Valid @RequestParam @Email String email){
-        System.out.println(email);
         return webUserService.deleteUser(email);
     }
 
