@@ -2,19 +2,18 @@ package authweb.controller;
 
 import authweb.config.swagger2.SwaggerMethodToDocument;
 import authweb.entity.Role;
-import authweb.payload.CreateUserRequest;
-import authweb.payload.UserDTO;
-import authweb.payload.WebLoginRequest;
-import authweb.payload.WebUsersListRequest;
+import authweb.payload.*;
 import authweb.service.WebUserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
 import java.util.List;
 
 @RestController
@@ -49,6 +48,31 @@ public class WebUserController {
     })
     public ResponseEntity<WebLoginRequest> createSeller(@Valid @RequestBody CreateUserRequest createUserRequest){
         return webUserService.createUser(createUserRequest, Role.ROLE_SELLER);
+    }
+
+    @SwaggerMethodToDocument
+    @PatchMapping(value = "/updateUser")
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')")
+    @ApiOperation(value = "To update user's account data, provide an e-mail, phone number first and last name")
+    @ApiResponses(value = {
+            @ApiResponse(code = 202, message = "User created successfully"),
+            @ApiResponse(code = 406, message = "Such User already exists"),
+    })
+    public ResponseEntity<HttpStatus> updateUser(@Valid @RequestBody UpdateUserRequest updateUserRequest){
+        return webUserService.updateUser(updateUserRequest);
+    }
+
+    @SwaggerMethodToDocument
+    @DeleteMapping(value = "/deleteUser")
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')")
+    @ApiOperation(value = "To delete a user's account, provide an e-mail")
+    @ApiResponses(value = {
+            @ApiResponse(code = 202, message = "User created successfully"),
+            @ApiResponse(code = 406, message = "Such User already exists"),
+    })
+    public ResponseEntity<HttpStatus> deleteUser(@Valid @RequestParam @Email String email){
+        System.out.println(email);
+        return webUserService.deleteUser(email);
     }
 
     @SwaggerMethodToDocument

@@ -2,10 +2,7 @@ package authweb.service;
 
 import authweb.entity.Role;
 import authweb.entity.User;
-import authweb.payload.CreateUserRequest;
-import authweb.payload.UserDTO;
-import authweb.payload.WebLoginRequest;
-import authweb.payload.WebUsersListRequest;
+import authweb.payload.*;
 import authweb.repository.UserRepository;
 import authweb.util.PasswordUtil;
 import org.modelmapper.ModelMapper;
@@ -51,13 +48,34 @@ public class WebUserService {
         return new ResponseEntity<>(new WebLoginRequest(createUserRequest.getEmail(), password), HttpStatus.ACCEPTED);
     }
 
+    public ResponseEntity<HttpStatus> updateUser(UpdateUserRequest updateUserRequest){
+        if (!userRepository.existsByEmail(updateUserRequest.getEmail())){
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        User user = userRepository.findByEmail(updateUserRequest.getEmail());
+        user.setFirstName(updateUserRequest.getFirstName());
+        user.setLastName(updateUserRequest.getLastName());
+        user.setPhoneNumber(updateUserRequest.getPhoneNumber());
+        user.setRoles(getRoles(updateUserRequest.getRoles()));
+        userRepository.save(user);
+
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    public ResponseEntity<HttpStatus> deleteUser(String email){
+        if (!userRepository.existsByEmail(email)){
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+        User user = userRepository.findByEmail(email);
+        userRepository.delete(user);
+
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
     public ResponseEntity<List<UserDTO>> getUsers(WebUsersListRequest webUsersListRequest){
 
-        List<Role> roles = new ArrayList<>();
-
-        for (String s: webUsersListRequest.getRoles()) {
-           roles.add(Role.getRole(s));
-        }
+        List<Role> roles = getRoles(webUsersListRequest.getRoles());
 
         HashSet<User> users = userRepository.findAllByRolesIn(roles);
 
@@ -76,5 +94,14 @@ public class WebUserService {
         }
 
         return new ResponseEntity<>(userDTOs, HttpStatus.ACCEPTED);
+    }
+
+    private List<Role> getRoles(List<String> strings) {
+        List<Role> roles = new ArrayList<>();
+
+        for (String s: strings) {
+           roles.add(Role.getRole(s));
+        }
+        return roles;
     }
 }
