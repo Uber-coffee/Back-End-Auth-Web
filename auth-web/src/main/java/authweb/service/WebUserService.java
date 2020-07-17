@@ -33,7 +33,7 @@ public class WebUserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public ResponseEntity<WebLoginRequest> createUser(CreateUserRequest createUserRequest, Role role){
+    public ResponseEntity<WebUserCreationResponse> createUser(CreateUserRequest createUserRequest, Role role){
         if(userRepository.existsByEmail(createUserRequest.getEmail())){
            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
@@ -45,7 +45,7 @@ public class WebUserService {
         // TODO send credentials to email address
         userRepository.save(user);
         log.debug("Create user with credentials: email({}), password({})", user.getEmail(), password);
-        return new ResponseEntity<>(new WebLoginRequest(createUserRequest.getEmail(), password), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(new WebUserCreationResponse(createUserRequest.getEmail(), password, user.getRegistrationDate().toString()), HttpStatus.ACCEPTED);
     }
 
     public ResponseEntity<HttpStatus> updateUser(UpdateUserRequest updateUserRequest){

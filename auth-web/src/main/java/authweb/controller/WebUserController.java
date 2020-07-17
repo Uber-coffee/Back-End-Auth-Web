@@ -34,7 +34,7 @@ public class WebUserController {
             @ApiResponse(code = 201, message = "User created successfully"),
             @ApiResponse(code = 403, message = "Such User already exists"),
     })
-    public ResponseEntity<WebLoginRequest> createManager(@Valid @RequestBody CreateUserRequest createUserRequest){
+    public ResponseEntity<WebUserCreationResponse> createManager(@Valid @RequestBody CreateUserRequest createUserRequest){
         return webUserService.createUser(createUserRequest, Role.ROLE_MANAGER);
     }
 
@@ -46,7 +46,7 @@ public class WebUserController {
             @ApiResponse(code = 201, message = "User created successfully"),
             @ApiResponse(code = 406, message = "Such User already exists"),
     })
-    public ResponseEntity<WebLoginRequest> createSeller(@Valid @RequestBody CreateUserRequest createUserRequest){
+    public ResponseEntity<WebUserCreationResponse> createSeller(@Valid @RequestBody CreateUserRequest createUserRequest){
         return webUserService.createUser(createUserRequest, Role.ROLE_SELLER);
     }
 
